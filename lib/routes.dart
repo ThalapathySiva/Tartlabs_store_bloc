@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tartlabs_store_bloc/authentication/authentication_bloc.dart';
 import 'package:tartlabs_store_bloc/authentication/authentication_states.dart';
+import 'package:tartlabs_store_bloc/home/app_bloc.dart';
+import 'package:tartlabs_store_bloc/home/app_events.dart';
+import 'package:tartlabs_store_bloc/home/home_screen.dart';
+import 'package:tartlabs_store_bloc/login/login_bloc.dart';
 import 'package:tartlabs_store_bloc/login/login_screen.dart';
 
 class AppRoutes {
@@ -13,19 +17,27 @@ class AppRoutes {
 
 Route<dynamic> getRoute(RouteSettings settings) {
   switch (settings.name) {
-    case AppRoutes.HOME_SCREEN:
+    case AppRoutes.LOGIN_SCREEN:
       return _buildLoginScreen();
+    case AppRoutes.HOME_SCREEN:
+      return _buildHomeScreen();
   }
+}
+
+_buildHomeScreen() {
+  return MaterialPageRoute(
+    builder: (context) => addAuthBloc(context, PageBuilder.buildHomeScreen()),
+  );
 }
 
 _buildLoginScreen() {
   return MaterialPageRoute(
-    builder: (context) => addAuthBloc(context, PageBuilder.BuildLoginScreen()),
+    builder: (context) => addAuthBloc(context, PageBuilder.buildLoginScreen()),
   );
 }
 
 class PageBuilder {
-  static Widget BuildLoginScreen() {
+  static Widget buildLoginScreen() {
     return BlocProvider(
       create: (context) {
         AuthenticationBloc authBloc =
@@ -33,6 +45,17 @@ class PageBuilder {
         return LoginBloc(authBloc);
       },
       child: LoginScreen(),
+    );
+  }
+
+  static Widget buildHomeScreen() {
+    return BlocProvider(
+      create: (context) {
+        AuthenticationBloc authBloc =
+            BlocProvider.of<AuthenticationBloc>(context);
+        return AppListBloc(authBloc)..add(AppListInitialEvent());
+      },
+      child: HomeScreen(),
     );
   }
 }

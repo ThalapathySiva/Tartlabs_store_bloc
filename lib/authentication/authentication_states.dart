@@ -2,12 +2,10 @@ import 'package:tartlabs_store_bloc/utils/basic_equatable.dart';
 
 class AuthenticationStates extends BaseEquatable {}
 
-class AppStarted extends AuthenticationStates {}
-
 class AuthenticationUnInitialState extends AuthenticationStates {
   @override
   String toString() {
-    return "AuthenticationInitialState";
+    return "AuthenticationUnInitialState";
   }
 }
 

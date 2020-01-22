@@ -27,7 +27,6 @@ class PreferenceHelper {
   static clearStorage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    //await prefs.setBool("isSeen", true);
   }
 
   static Map<String, dynamic> _parseAndDecode(String response) {
